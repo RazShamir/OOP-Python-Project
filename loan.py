@@ -25,3 +25,8 @@ class Loan:
     def set_return_date(self):
         return self._return_date
         
+    def __str__(self) -> str:
+        return f"Book-ID: {str(self.get_book_id())} Customer-ID: {str(self.get_customer_id())} Loan-Date: {self.get_loan_date()} Return-Date: {self.get_return_date()}"
+    
+    def __repr__(self) -> str:
+        return self.__str__()

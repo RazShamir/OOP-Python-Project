@@ -22,3 +22,9 @@ class Customer:
     
     def get_birth_date(self):
         return self._birth_date
+
+    def __str__(self) -> str:
+        return f"ID: {str(self.get_id())} Name: {self.get_name()} Address: {self.get_address()} Email: {self.get_email()} Birthdate: {self.get_birth_date()}"
+
+    def __repr__(self) -> str:
+        return self.__str__()
