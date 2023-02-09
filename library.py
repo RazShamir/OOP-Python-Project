@@ -72,7 +72,7 @@ class Library:
                 if last_loan.get_return_date() + timedelta(weeks=2) > datetime.now():
                     raise ValueError("Client is in a 2 weeks ban")
                 else:
-                    print("Customer was in a ban due to late loan but 2 weeks has passed")
+                    print("Two weeks have passed, the client is no longer baned")
 
         new_loan = Loan(customer_id, book_id, datetime.now(), None)
         self._loan_list.append(new_loan)
