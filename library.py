@@ -10,10 +10,11 @@ class Library:
         self._customer_list: list[Customer] = []
         self._book_list: list[Book] = []
         self._loan_list: list[Loan] = []
+        self._returned_loan_list: list[Loan] = []
         self.load()
 
     def save(self):
-        data = [self._customer_list, self._book_list, self._loan_list]
+        data = [self._customer_list, self._book_list, self._loan_list, self._returned_loan_list]
         with open("libraryDB.pickle", 'wb') as f:
             pickle.dump(data, f)
 
@@ -26,6 +27,7 @@ class Library:
             self._customer_list = data[0]
             self._book_list = data[1]
             self._loan_list = data[2]
+            self._returned_loan_list = data[3]
     
     def add_new_customer(self, customer: Customer):
         for cus in self._customer_list:
@@ -46,20 +48,32 @@ class Library:
             if book.get_id() == book_id:
                 return book
         raise ValueError("Book id doesn't exist")
-    
+
     def loan_a_book(self, book_id: int, customer_id: int):
         for loan in self._loan_list:
             if customer_id == loan.get_customer_id():
                 if loan.get_return_date() == None:
                     raise ValueError("Customer has not returned last loan")
 
-                if loan in self.get_late_loans(): #late return
-                    if loan.get_return_date() + timedelta(weeks=2) < datetime.now():
-                        raise ValueError("Last loan is late so a two weeks punishment")
-
             if book_id == loan.get_book_id():
                 raise ValueError("The book is already loaned")
         
+        last_loan = None
+        for loan in self._returned_loan_list:
+            if loan.get_customer_id() == customer_id:
+                if last_loan == None:
+                    last_loan = loan
+                else:
+                    if loan.get_loan_date() > last_loan.get_loan_date():
+                        last_loan = loan
+        if last_loan != None:
+            book = self.get_book_by_id(book_id)
+            if last_loan.get_return_date() - last_loan.get_loan_date() >= book.get_loan_time():
+                if last_loan.get_return_date() + timedelta(weeks=2) > datetime.now():
+                    raise ValueError("Client is in a 2 weeks ban")
+                else:
+                    print("Customer was in a ban due to late loan but 2 weeks has passed")
+
         new_loan = Loan(customer_id, book_id, datetime.now(), None)
         self._loan_list.append(new_loan)
         self.save()
@@ -80,7 +94,7 @@ class Library:
         
         raise ValueError("The book hasn't been loaned")
     
-    def get_late_loans(self):
+    def get_late_loans(self): #loans were not returned yet
         late_loans_list: list[Loan] = []
         for loan in self._loan_list:
             book: Book = self.get_book_by_loan(loan)
@@ -94,10 +108,11 @@ class Library:
     
     def display_customer_loans(self, customer_id: int):
         customer_loans_list: list[Loan] = []
+        customer = self.get_customer_by_id(customer_id)
         for loan in self._loan_list:
             if loan.get_customer_id() == customer_id:
                 customer_loans_list.append(loan)
-        print(f"The customers loans: {customer_loans_list}")
+        print(f"{customer.get_name()}'s loans: {customer_loans_list}")
     
     def get_book_by_name(self, book_name: str):
         books: list[Book] = []
@@ -177,8 +192,20 @@ class Library:
         else:
             if loan in self.get_late_loans():
                 print("The customer has not returned his book on time, he cannot loan for 2 weeks")
+            
+            loan._return_date = datetime.now()
+            self._returned_loan_list.append(loan)
             self._loan_list.remove(loan)
             self.save()
+    
+    #unused
+    def get_late_returned(self):
+        late_list: list[Loan] = []
+        for loan in self._returned_loan_list:
+            book = self.get_book_by_id(loan.get_book_id())
+            if loan.set_return_date() - loan.get_loan_date() >= book.get_loan_time():
+                late_list.append(loan)
+        return late_list
 
 
 

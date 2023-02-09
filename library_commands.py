@@ -6,6 +6,7 @@ from library import Library
 
 print("Welcome to the Library! what would you like to do?")
 menu = ""
+menu += "0. Reload menu\n"
 menu += "1. Add new customer\n"
 menu += "2. Add a book\n"
 menu += "3. Loan a book\n"
@@ -20,6 +21,7 @@ menu += "11. Find books by author\n"
 menu += "12. Find customer by name\n"
 menu += "13. Remove a book from the Library\n"
 menu += "14. Remove a customer from the Library\n"
+menu += "15. Exit\n"
 
 lib = Library()
 
@@ -71,7 +73,7 @@ def op9():
         lib.display_customer_loans(customer_id)
 
 def op10():
-    book_name = input("Book name: ")
+    book_name = input("Book name: ").capitalize()
     book = lib.get_book_by_name(book_name)
     if book != None:
         print(book)
@@ -99,6 +101,14 @@ def op14():
     customer = lib.remove_customer(customer_id)
     if customer != None:
         print(customer)
+
+def ticks():
+    return (datetime.now() - datetime(1,1,1)).total_seconds()
+
+def write_ex(ex):
+    file_name = f"exceptions"
+    with open(file_name, 'a') as f:
+        f.write(str(ex) + "\n")
 
 option = ""
 print(menu)
@@ -135,11 +145,15 @@ while option != "15":
             op13()
         if option == "14":
             op14()
+        if int(option) > 15 or int(option) < 0:
+            raise ValueError("That is not an option!")
     except Exception as ex:
         print("ERROR: " + str(ex))
-    print("What would you like to do now?")
+        write_ex(ex)
+    if option != '15':
+        print("What would you like to do now?")
 
 
 
 #test notes:
-# no capatlaize
+
