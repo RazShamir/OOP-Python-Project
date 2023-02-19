@@ -79,13 +79,13 @@ class Library:
         self.save()
     
     def diasplay_book_list(self):
-        print(f"List of books: {self._book_list}")
+        print(f"List of books: {self._book_list}\n")
     
     def display_customer_list(self):
-        print(f"List of customers: {self._customer_list}")
+        print(f"List of customers: {self._customer_list}\n")
     
     def display_loan_list(self):
-        print(f"List of loans: {self._loan_list}")
+        print(f"List of loans: {self._loan_list}\n")
 
     def get_book_by_loan(self, loan: Loan) -> Book:
         for book in self._book_list:
@@ -104,7 +104,7 @@ class Library:
 
     def display_late_loans(self):
         late_loans_list: list[Loan] = self.get_late_loans()
-        print(f"List of late loans: {late_loans_list}")
+        print(f"List of late loans: {late_loans_list}\n")
     
     def display_customer_loans(self, customer_id: int):
         customer_loans_list: list[Loan] = []
@@ -112,7 +112,7 @@ class Library:
         for loan in self._loan_list:
             if loan.get_customer_id() == customer_id:
                 customer_loans_list.append(loan)
-        print(f"{customer.get_name()}'s loans: {customer_loans_list}")
+        print(f"{customer.get_name()}'s loans: {customer_loans_list}\n")
     
     def get_book_by_name(self, book_name: str):
         books: list[Book] = []

@@ -7,6 +7,7 @@ from library import Library
 
 print("Welcome to the Library! what would you like to do?")
 menu = ""
+menu += "----------------------------------------\n"
 menu += "0. Reload menu\n"
 menu += "1. Add new customer\n"
 menu += "2. Add a book\n"
@@ -36,7 +37,7 @@ def op1():
     birth_date = input("Customer date of birth: ")
     customer = Customer(id, name, address, email, birth_date)
     lib.add_new_customer(customer)
-    print("~Customer was succesfully added!~")
+    print("~Customer was succesfully added!~\n")
     
 def op2():
     print("-Add book-")
@@ -47,7 +48,7 @@ def op2():
     type: int = int(input("Book loan type: "))
     book = Book(id, name, author, year_published, type)
     lib.add_new_book(book)
-    print("~Book was succesfully added!~")
+    print("~Book was succesfully added!~\n")
 
 def op3():
     print("-Loan a book-")
@@ -56,14 +57,14 @@ def op3():
     if lib.get_book_by_id(book_id) != None:
         if lib.get_customer_by_id(customer_id) != None:
             lib.loan_a_book(book_id, customer_id)
-    print("~Enjoy your book!~")
+    print("~Enjoy your book!~\n")
 
 def op4():
     print("-Return a book-")
     customer_id: int = int(input("Customer ID: "))
     if lib.get_customer_by_id(customer_id) != None:
         lib.return_book(customer_id)
-    print("~The book has been returned to the Library!~")
+    print("~The book has been returned to the Library!~\n")
 
 def op5():
     lib.diasplay_book_list()
@@ -88,21 +89,21 @@ def op10():
     book_name = input("Book name: ").capitalize()
     book = lib.get_book_by_name(book_name)
     if book != None:
-        print(book)
+        print(book, "\n")
 
 def op11():
     print("-Find a book-")
     book_author = input("Book author: ").capitalize()
     book = lib.get_book_by_author(book_author)
     if book != None:
-        print(book)
+        print(book, "\n")
 
 def op12():
     print("-Find customer-")
     customer_name = input("Customer name: ").capitalize()
     customer = lib.get_customer_by_name(customer_name)
     if customer != None:
-        print(customer)
+        print(customer, "\n")
 
 def op13():
     print("-Remove a book-")
@@ -110,15 +111,15 @@ def op13():
     book = lib.remove_book(book_id)
     if book != None:
         print(book)
-    print("~The book has been removed from the Library~")
+    print("~The book has been removed from the Library~\n")
 
 def op14():
-    print("-Renove a customer-")
+    print("-Remove a customer-")
     customer_id: int = int(input("Customer ID: "))
     customer = lib.remove_customer(customer_id)
     if customer != None:
         print(customer)
-    print("~The customer no longer exists in the Library database~")
+    print("~The customer no longer exists in the Library database~\n")
 
 def ticks():
     return (datetime.now() - datetime(1,1,1)).total_seconds()
@@ -168,12 +169,8 @@ while option != "15":
         if int(option) > 15 or int(option) < 0:
             raise ValueError("That is not an option!")
     except Exception as ex:
-        print("ERROR: " + str(ex))
+        print("ERROR: " + str(ex), "\n")
         write_ex(ex)
     if option != '15':
         print("What would you like to do now?")
-
-
-
-#test notes:
 
